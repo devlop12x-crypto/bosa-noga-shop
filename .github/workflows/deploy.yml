@@ -1,0 +1,81 @@
+name: CI / Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Отмена идущей публикации может оставить Pages в промежуточном состоянии
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  check:
+    name: Линтер, форматирование, типы, тесты
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: ESLint
+        run: npm run lint
+
+      - name: Prettier
+        run: npm run format:check
+
+      - name: TypeScript
+        run: npm run typecheck
+
+      - name: Тесты
+        run: npm test
+
+  deploy:
+    name: Деплой на GitHub Pages
+    needs: check
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      # Абсолютный base из имени репозитория: у приложения вложенные URL
+      # (/catalog/20.html), относительный './' на них ломает пути к ассетам
+      - name: Сборка
+        run: npm run build -- --base=/${{ github.event.repository.name }}/
+
+      # GitHub Pages отдаёт 404.html на любой несуществующий путь — так прямой
+      # заход на /catalog.html открывает SPA, а роутер сам решает, что показать
+      - name: SPA-фолбэк для GitHub Pages
+        run: cp dist/index.html dist/404.html
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./dist
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

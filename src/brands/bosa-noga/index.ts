@@ -1,0 +1,34 @@
+import type { StorefrontConfig } from '../../storefront';
+import { AboutContent } from './AboutContent';
+import banner from './assets/banner.jpg';
+import logo from './assets/header-logo.png';
+import { ContactsContent } from './ContactsContent';
+import { contacts } from './contacts';
+
+/** Bosa Noga — магазин обуви из вёрстки диплома */
+export const bosaNoga: StorefrontConfig = {
+  name: 'Bosa Noga',
+  description: 'Bosa Noga — модный интернет-магазин обуви и аксессуаров',
+  favicon:
+    "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👟</text></svg>",
+  logo: { src: logo, width: 184, height: 59, alt: 'Bosa Noga' },
+  banner: {
+    src: banner,
+    width: 1201,
+    height: 357,
+    alt: 'К весне готовы!',
+    title: 'К весне готовы!',
+  },
+  contacts,
+  footer: {
+    copyright:
+      '2009-2019 © BosaNoga.ru — модный интернет-магазин обуви и аксессуаров. Все права защищены.',
+    note: 'Доставка по всей России!',
+    paymentSystems: ['paypal', 'master-card', 'visa', 'yandex', 'webmoney', 'qiwi'],
+    socialLinks: ['twitter', 'vk'],
+  },
+  pages: {
+    About: AboutContent,
+    Contacts: ContactsContent,
+  },
+};
