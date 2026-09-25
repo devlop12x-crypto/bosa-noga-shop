@@ -1,7 +1,7 @@
 {
   "name": "bosa-noga-shop",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "description": "Bosa Noga — интернет-магазин обуви. Дипломный проект курса «React» Нетологии.",
   "engines": {
@@ -20,9 +20,11 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "2.12.0",
     "bootstrap": "4.6.2",
     "react": "19.3.0",
     "react-dom": "19.3.0",
+    "react-redux": "9.3.0",
     "react-router": "8.4.0"
   },
   "devDependencies": {
@@ -42,6 +44,7 @@
     "eslint-plugin-react-hooks": "7.1.1",
     "globals": "17.12.0",
     "jsdom": "30.1.1",
+    "msw": "2.15.0",
     "prettier": "3.9.9",
     "typescript": "6.0.3",
     "typescript-eslint": "8.70.1",

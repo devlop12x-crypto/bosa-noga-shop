@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react';
+import type { MoneyFormat } from '../core/money';
 
 /**
  * Контракт «бренда» — всё, чем один магазин отличается от другого.
@@ -38,6 +39,15 @@ export interface StorefrontConfig {
     note: string;
     paymentSystems: readonly PaymentSystem[];
     socialLinks: readonly SocialNetwork[];
+  };
+  /** Формат цен */
+  money: MoneyFormat;
+  catalog: {
+    /**
+     * Пропорции картинки в карточке (CSS aspect-ratio). Фото товаров приходят
+     * разных размеров, рамка одинаковая: у обуви 3 / 4, у перчаток может быть 1 / 1.
+     */
+    imageAspectRatio: string;
   };
   /** Содержимое информационных страниц. Заголовки и маршруты — общие, их задаёт приложение */
   pages: {

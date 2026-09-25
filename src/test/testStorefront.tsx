@@ -21,6 +21,8 @@ export const glovesStorefront: StorefrontConfig = {
     email: 'hello@gloves.test',
     workingHours: 'По будням: с 10-00 до 19-00',
   },
+  money: { locale: 'ru-RU', currencyLabel: '₽' },
+  catalog: { imageAspectRatio: '1 / 1' },
   footer: {
     copyright: '© Перчатки & Ко',
     note: 'Доставка по Вологде',

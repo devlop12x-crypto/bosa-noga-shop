@@ -32,6 +32,11 @@ export default defineConfig(
       // Типы пропсов проверяет TypeScript
       'react/prop-types': 'off',
       '@typescript-eslint/consistent-type-imports': 'error',
+      // _name — осознанно неиспользуемое: отброшенное поле при деструктуризации, параметр по сигнатуре
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_', ignoreRestSiblings: true },
+      ],
       eqeqeq: ['error', 'always'],
       'no-console': ['warn', { allow: ['warn', 'error'] }],
     },
