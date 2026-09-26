@@ -20,6 +20,8 @@ export const bosaNoga: StorefrontConfig = {
     title: 'К весне готовы!',
   },
   contacts,
+  money: { locale: 'ru-RU', currencyLabel: 'руб.' },
+  catalog: { imageAspectRatio: '3 / 4' },
   footer: {
     copyright:
       '2009-2019 © BosaNoga.ru — модный интернет-магазин обуви и аксессуаров. Все права защищены.',

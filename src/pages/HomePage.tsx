@@ -1,16 +1,17 @@
+import { useState } from 'react';
+import type { CategoryId } from '../core/catalog';
+import { Catalog } from '../features/catalog/Catalog';
+import { TopSales } from '../features/topSales/TopSales';
 import { PageTitle } from '../shared/ui/PageTitle';
 
-/** Главная: «Хиты продаж» и каталог подключаются на этапе работы с API */
 export function HomePage() {
+  const [categoryId, setCategoryId] = useState<CategoryId | null>(null);
+
   return (
     <>
       <PageTitle />
-      <section className="top-sales">
-        <h2 className="text-center">Хиты продаж!</h2>
-      </section>
-      <section className="catalog">
-        <h2 className="text-center">Каталог</h2>
-      </section>
+      <TopSales />
+      <Catalog filter={{ categoryId, search: '' }} onCategoryChange={setCategoryId} />
     </>
   );
 }
