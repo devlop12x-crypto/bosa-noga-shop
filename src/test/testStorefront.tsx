@@ -1,3 +1,4 @@
+import { normalizeRuPhone } from '../core/order';
 import type { StorefrontConfig } from '../storefront';
 
 /**
@@ -5,6 +6,7 @@ import type { StorefrontConfig } from '../storefront';
  * поэтому любая обувная строка, зашитая в компоненты, сразу всплывёт.
  */
 export const glovesStorefront: StorefrontConfig = {
+  id: 'gloves',
   name: 'Перчатки & Ко',
   description: 'Кожаные перчатки ручной работы',
   favicon: 'data:,',
@@ -23,6 +25,20 @@ export const glovesStorefront: StorefrontConfig = {
   },
   money: { locale: 'ru-RU', currencyLabel: '₽' },
   catalog: { imageAspectRatio: '1 / 1' },
+  product: {
+    variantsLabel: 'Размеры перчаток:',
+    variantColumnTitle: 'Размер руки',
+    specs: [
+      { key: 'sku', label: 'Артикул' },
+      { key: 'material', label: 'Кожа' },
+      { key: 'lining', label: 'Подкладка' },
+    ],
+    maxQuantity: 5,
+  },
+  order: {
+    normalizePhone: normalizeRuPhone,
+    phonePlaceholder: '+7 900 000-00-00',
+  },
   footer: {
     copyright: '© Перчатки & Ко',
     note: 'Доставка по Вологде',

@@ -1,3 +1,4 @@
+import { normalizeRuPhone } from '../../core/order';
 import type { StorefrontConfig } from '../../storefront';
 import { AboutContent } from './AboutContent';
 import banner from './assets/banner.jpg';
@@ -7,6 +8,7 @@ import { contacts } from './contacts';
 
 /** Bosa Noga — магазин обуви из вёрстки диплома */
 export const bosaNoga: StorefrontConfig = {
+  id: 'bosa-noga',
   name: 'Bosa Noga',
   description: 'Bosa Noga — модный интернет-магазин обуви и аксессуаров',
   favicon:
@@ -22,6 +24,24 @@ export const bosaNoga: StorefrontConfig = {
   contacts,
   money: { locale: 'ru-RU', currencyLabel: 'руб.' },
   catalog: { imageAspectRatio: '3 / 4' },
+  product: {
+    variantsLabel: 'Размеры в наличии:',
+    variantColumnTitle: 'Размер',
+    // Ровно те поля, что в вёрстке и задании — «других не нужно»
+    specs: [
+      { key: 'sku', label: 'Артикул' },
+      { key: 'manufacturer', label: 'Производитель' },
+      { key: 'color', label: 'Цвет' },
+      { key: 'material', label: 'Материалы' },
+      { key: 'season', label: 'Сезон' },
+      { key: 'reason', label: 'Повод' },
+    ],
+    maxQuantity: 10,
+  },
+  order: {
+    normalizePhone: normalizeRuPhone,
+    phonePlaceholder: 'Ваш телефон',
+  },
   footer: {
     copyright:
       '2009-2019 © BosaNoga.ru — модный интернет-магазин обуви и аксессуаров. Все права защищены.',

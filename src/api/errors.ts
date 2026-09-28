@@ -22,3 +22,15 @@ export const describeRequestError = (
       return 'Что-то пошло не так.';
   }
 };
+
+/**
+ * Сервер ответил 404 — сущности нет, а не «сломалось».
+ * Учитываем и 404 с не-JSON телом: fetchBaseQuery отдаёт его как PARSING_ERROR.
+ */
+export const isNotFoundError = (error: unknown): boolean => {
+  if (typeof error !== 'object' || error === null || !('status' in error)) return false;
+  if (error.status === 404) return true;
+  return (
+    error.status === 'PARSING_ERROR' && 'originalStatus' in error && error.originalStatus === 404
+  );
+};
