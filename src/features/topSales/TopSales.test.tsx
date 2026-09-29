@@ -1,6 +1,8 @@
 import { screen, within } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import { describe, expect, it } from 'vitest';
+import { topSalesFixture } from '../../test/mocks/fixtures';
+import { createGate } from '../../test/mocks/gate';
 import { server } from '../../test/mocks/server';
 import { renderRoute } from '../../test/renderRoute';
 
@@ -21,11 +23,22 @@ describe('Хиты продаж', () => {
   });
 
   it('пока грузится — свой лоадер', async () => {
+    const { gate, release } = createGate();
+    server.use(
+      http.get('*/api/top-sales', async () => {
+        await gate;
+        return HttpResponse.json(topSalesFixture);
+      }),
+    );
     renderRoute('/');
     const section = await topSalesSection();
+
     expect(
-      within(section).getByRole('status', { name: 'Загрузка хитов продаж' }),
+      await within(section).findByRole('status', { name: 'Загрузка хитов продаж' }),
     ).toBeInTheDocument();
+    release();
+    await within(section).findByText('Перчатки мужские №1');
+    expect(within(section).queryByRole('status')).not.toBeInTheDocument();
   });
 
   it('пустой ответ — блок не отображается совсем, даже заголовок', async () => {

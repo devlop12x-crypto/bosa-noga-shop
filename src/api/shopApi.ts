@@ -1,10 +1,12 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import type { Category, CatalogFilter, ProductSummary } from '../core/catalog';
+import type { OrderItem } from '../core/cart';
+import type { Category, CatalogFilter, Product, ProductId, ProductSummary } from '../core/catalog';
+import type { OrderOwner } from '../core/order';
 import { nextPageOffset } from '../core/catalog';
 import { baseQuery } from './baseQuery';
 import { CATALOG_PAGE_SIZE } from './config';
-import type { CategoryDto, ItemShortDto } from './dto';
-import { toCategory, toProductSummary } from './mappers';
+import type { CategoryDto, ItemFullDto, ItemShortDto } from './dto';
+import { toCategory, toOrderRequest, toProduct, toProductSummary } from './mappers';
 
 export const shopApi = createApi({
   reducerPath: 'shopApi',
@@ -45,7 +47,26 @@ export const shopApi = createApi({
       // Ушли из категории — её страницы выбрасываются: при возврате будет свежий запрос
       keepUnusedDataFor: 0,
     }),
+
+    getProduct: build.query<Product, ProductId>({
+      query: (id) => `items/${id}`,
+      transformResponse: (item: ItemFullDto) => toProduct(item),
+    }),
+
+    /** Ответ 204 без тела — fetchBaseQuery превращает его в null, это не ошибка */
+    createOrder: build.mutation<null, { owner: OrderOwner; items: readonly OrderItem[] }>({
+      query: ({ owner, items }) => ({
+        url: 'order',
+        method: 'POST',
+        body: toOrderRequest(owner, items),
+      }),
+    }),
   }),
 });
 
-export const { useGetTopSalesQuery, useGetCategoriesQuery, useGetProductsInfiniteQuery } = shopApi;
+export const {
+  useGetTopSalesQuery,
+  useGetCategoriesQuery,
+  useGetProductsInfiniteQuery,
+  useGetProductQuery,
+} = shopApi;

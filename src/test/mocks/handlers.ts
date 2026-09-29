@@ -1,9 +1,9 @@
 import { http, HttpResponse } from 'msw';
-import { categoriesFixture, itemsFixture, topSalesFixture } from './fixtures';
+import { categoriesFixture, findItem, itemsFixture, topSalesFixture, toShort } from './fixtures';
 
 const PAGE_SIZE = 6;
 
-/** Логика фильтрации повторяет бэкенд диплома: категория, поиск по названию или точному цвету, offset */
+/** Логика повторяет бэкенд диплома: категория, поиск по названию или точному цвету, offset */
 export const handlers = [
   http.get('*/api/top-sales', () => HttpResponse.json(topSalesFixture)),
 
@@ -19,8 +19,17 @@ export const handlers = [
       .filter((item) => categoryId === 0 || item.category === categoryId)
       .filter((item) => item.title.toLowerCase().includes(q) || item.color.toLowerCase() === q)
       .slice(offset, offset + PAGE_SIZE)
-      .map(({ color: _color, ...item }) => item);
+      .map(toShort);
 
     return HttpResponse.json(page);
   }),
+
+  http.get('*/api/items/:id', ({ params }) => {
+    const item = findItem(Number(params.id));
+    // Как у бэкенда: 404 с JSON-строкой в теле
+    return item ? HttpResponse.json(item) : HttpResponse.json('Not found', { status: 404 });
+  }),
+
+  // Как у бэкенда: 204 без тела
+  http.post('*/api/order', () => new HttpResponse(null, { status: 204 })),
 ];

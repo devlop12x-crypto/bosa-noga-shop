@@ -1,6 +1,7 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import { describe, expect, it } from 'vitest';
+import { createGate } from '../../test/mocks/gate';
 import { recordItemsRequests } from '../../test/mocks/requestLog';
 import { server } from '../../test/mocks/server';
 import { renderRoute } from '../../test/renderRoute';
@@ -47,7 +48,7 @@ describe('Каталог на главной', () => {
   });
 
   it('пока грузится следующая порция — лоадер над кнопкой, кнопка отключена', async () => {
-    let release: () => void = () => {};
+    const { gate, release } = createGate();
     const { user } = renderRoute('/');
     const section = await catalogSection();
     await within(section).findByText('Перчатки мужские №6');
@@ -56,9 +57,7 @@ describe('Каталог на главной', () => {
       http.get(
         '*/api/items',
         async () => {
-          await new Promise<void>((resolve) => {
-            release = resolve;
-          });
+          await gate;
           return HttpResponse.json([]);
         },
         { once: true },

@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react';
+import type { SpecDefinition } from '../core/catalog';
 import type { MoneyFormat } from '../core/money';
 
 /**
@@ -21,6 +22,8 @@ export type PaymentSystem = 'paypal' | 'master-card' | 'visa' | 'yandex' | 'webm
 export type SocialNetwork = 'twitter' | 'vk';
 
 export interface StorefrontConfig {
+  /** Машинный идентификатор: префикс ключей localStorage, чтобы магазины на одном домене не делили корзину */
+  id: string;
   /** Название магазина: заголовки вкладок */
   name: string;
   /** Текст для <meta name="description"> */
@@ -48,6 +51,21 @@ export interface StorefrontConfig {
      * разных размеров, рамка одинаковая: у обуви 3 / 4, у перчаток может быть 1 / 1.
      */
     imageAspectRatio: string;
+  };
+  product: {
+    /** Подпись над вариантами на странице товара: «Размеры в наличии:» */
+    variantsLabel: string;
+    /** Заголовок колонки варианта в корзине: «Размер» */
+    variantColumnTitle: string;
+    /** Строки таблицы характеристик: какие атрибуты показывать и как их подписать */
+    specs: readonly SpecDefinition[];
+    /** Максимум единиц в одной позиции */
+    maxQuantity: number;
+  };
+  order: {
+    /** Приводит телефон к формату для заказа; null — номер не распознан */
+    normalizePhone: (raw: string) => string | null;
+    phonePlaceholder: string;
   };
   /** Содержимое информационных страниц. Заголовки и маршруты — общие, их задаёт приложение */
   pages: {
