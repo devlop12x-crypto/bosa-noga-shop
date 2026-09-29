@@ -1,7 +1,7 @@
 {
   "name": "bosa-noga-shop",
   "private": true,
-  "version": "0.4.0",
+  "version": "0.5.0",
   "type": "module",
   "description": "Bosa Noga — интернет-магазин обуви. Дипломный проект курса «React» Нетологии.",
   "engines": {

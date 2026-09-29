@@ -19,7 +19,7 @@ export function CartTable({ lines, changes, disabled, onRemove }: CartTableProps
 
   return (
     <div className="table-responsive">
-      <table className="table table-bordered">
+      <table className="table table-bordered cart-table">
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -37,16 +37,19 @@ export function CartTable({ lines, changes, disabled, onRemove }: CartTableProps
             const change = changeByKey.get(key);
             return (
               <tr key={key} className={change ? 'table-warning' : undefined}>
-                <th scope="row">{index + 1}</th>
-                <td>
+                <th scope="row" className="cart-table-index">
+                  {index + 1}
+                </th>
+                <td className="cart-table-title">
                   <Link to={productPath(line.productId)}>{line.title}</Link>
                   {change && <ChangeNote change={change} format={price} />}
                 </td>
-                <td>{line.variantLabel}</td>
-                <td>{line.quantity}</td>
-                <td>{price(line.price)}</td>
-                <td>{price(lineTotal(line))}</td>
-                <td>
+                {/* data-label — подписи для узкого экрана, где таблица превращается в карточки */}
+                <td data-label={product.variantColumnTitle}>{line.variantLabel}</td>
+                <td data-label="Кол-во">{line.quantity}</td>
+                <td data-label="Стоимость">{price(line.price)}</td>
+                <td data-label="Итого">{price(lineTotal(line))}</td>
+                <td className="cart-table-actions">
                   <button
                     type="button"
                     className="btn btn-outline-danger btn-sm"
@@ -60,7 +63,7 @@ export function CartTable({ lines, changes, disabled, onRemove }: CartTableProps
               </tr>
             );
           })}
-          <tr>
+          <tr className="cart-table-total">
             <td colSpan={5} className="text-right">
               Общая стоимость
             </td>

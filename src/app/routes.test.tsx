@@ -44,4 +44,21 @@ describe('маршрутизация', () => {
     await user.click(await screen.findByRole('link', { name: 'Корзина' }));
     expect(router.state.location.pathname).toBe('/cart.html');
   });
+
+  it('«гамбургер» открывает меню и закрывает его после перехода', async () => {
+    const { user, router } = renderRoute('/');
+    const toggler = await screen.findByRole('button', { name: 'Открыть меню' });
+    const menu = document.getElementById(toggler.getAttribute('aria-controls')!)!;
+
+    expect(menu).not.toHaveClass('show');
+    await user.click(toggler);
+    expect(menu).toHaveClass('show');
+    expect(toggler).toHaveAttribute('aria-expanded', 'true');
+    expect(toggler).toHaveAccessibleName('Закрыть меню');
+
+    await user.click(within(menu).getByRole('link', { name: 'Контакты' }));
+    expect(router.state.location.pathname).toBe('/contacts.html');
+    expect(menu).not.toHaveClass('show');
+    expect(toggler).toHaveAttribute('aria-expanded', 'false');
+  });
 });
