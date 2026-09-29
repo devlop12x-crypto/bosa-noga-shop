@@ -120,3 +120,140 @@ button.catalog-item-size.selected {
   z-index: 10;
   border-radius: 0;
 }
+
+/* ===================== Адаптивность =====================
+ * Вёрстка диплома рассчитана на десктоп. Ниже — поправки для узких экранов;
+ * на ширине от 576px/768px всё выглядит как в исходной вёрстке.
+ */
+
+/* Поле поиска позиционируется от блока иконок, а не от всей шапки:
+   когда меню на телефоне раскрыто, шапка выше, и поле уезжало бы вниз */
+.header-controls {
+  position: relative;
+}
+
+/* Как в вёрстке: правый край поля уходит под лупу (у лупы z-index: 1).
+   В вёрстке отсчёт шёл от края шапки с её padding 16px — отсюда 65 − 16 */
+.header-controls .header-controls-search-form {
+  right: 49px;
+}
+
+@media (max-width: 575.98px) {
+  /* Логотип, две иконки и «гамбургер» помещаются в строку даже на 320px */
+  .navbar-brand {
+    margin-right: 0.5rem;
+  }
+
+  .navbar-brand img {
+    width: clamp(96px, 30vw, 140px);
+    height: auto;
+  }
+
+  .navbar-toggler {
+    padding: 0.25rem 0.5rem;
+  }
+
+  .header-controls .header-controls-pic {
+    margin: 0 6px;
+  }
+
+  /* Поле поиска поверх логотипа, правый край под лупой, левый — в пределах экрана */
+  .header-controls .header-controls-search-form {
+    right: 44px;
+    width: min(233px, calc(100vw - 150px));
+  }
+}
+
+/* Заголовок баннера: в вёрстке 487px и 48px — на узком экране вылезал за край
+   и закрывал заголовок под баннером */
+@media (max-width: 767.98px) {
+  .banner-header {
+    top: auto;
+    bottom: 12%;
+    width: 80%;
+    height: auto;
+    padding: 0.25em 0.5em;
+    font-size: clamp(20px, 6vw, 36px);
+    line-height: 1.3;
+  }
+}
+
+/* Футер столбиком: отступ между секциями */
+@media (max-width: 767.98px) {
+  .footer section {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Корзина на телефоне — карточки вместо таблицы из 7 колонок:
+   без горизонтальной прокрутки, кнопка «Удалить» всегда на виду */
+@media (max-width: 575.98px) {
+  .cart-table thead {
+    display: none;
+  }
+
+  .cart-table,
+  .cart-table tbody,
+  .cart-table tr,
+  .cart-table th,
+  .cart-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .cart-table {
+    border: 0;
+  }
+
+  .cart-table tr {
+    margin-bottom: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+  }
+
+  .cart-table th,
+  .cart-table td {
+    border: 0;
+    padding: 0.35rem 0.75rem;
+  }
+
+  .cart-table-index {
+    display: none !important;
+  }
+
+  .cart-table-title {
+    padding-top: 0.75rem !important;
+    font-weight: 500;
+  }
+
+  .cart-table td[data-label] {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .cart-table td[data-label]::before {
+    content: attr(data-label);
+    color: #6c757d;
+  }
+
+  .cart-table-actions {
+    padding-bottom: 0.75rem !important;
+  }
+
+  .cart-table-total {
+    display: flex !important;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    font-weight: 500;
+  }
+
+  .cart-table-total td {
+    width: auto;
+    padding: 0 0.75rem;
+  }
+
+  .cart-table-total td:empty {
+    display: none;
+  }
+}

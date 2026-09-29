@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Название, описание и favicon задаёт бренд (src/brands) через React 19 -->
+    <!--
+      Пустая иконка-заглушка: без неё, пока грузится скрипт, браузер сам запрашивает
+      /favicon.ico с корня домена и потом отменяет запрос — красная строка в DevTools.
+      Иконка бренда добавится позже и победит: из равноценных браузер берёт последнюю.
+    -->
+    <link rel="icon" href="data:," />
     <!-- Шрифты вынесены из style.css: @import внутри бандла оказался бы не в начале файла -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

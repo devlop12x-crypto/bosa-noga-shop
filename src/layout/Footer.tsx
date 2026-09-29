@@ -8,7 +8,8 @@ export function Footer() {
   return (
     <footer className="container bg-light footer">
       <div className="row">
-        <div className="col">
+        {/* На телефоне колонки идут столбиком, на планшете и шире — в ряд, как в вёрстке */}
+        <div className="col-12 col-md">
           <section>
             <h5>Информация</h5>
             <ul className="nav flex-column">
@@ -22,7 +23,7 @@ export function Footer() {
             </ul>
           </section>
         </div>
-        <div className="col">
+        <div className="col-12 col-md">
           <section>
             <h5>Принимаем к оплате:</h5>
             <div className="footer-pay">
@@ -39,7 +40,7 @@ export function Footer() {
             </div>
           </section>
         </div>
-        <div className="col text-right">
+        <div className="col-12 col-md text-md-right">
           <section className="footer-contacts">
             <h5>Контакты:</h5>
             <a className="footer-contacts-phone" href={contacts.phone.href}>
