@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import type { OrderRequestDto } from '../api/dto';
 import type { CartLine } from '../core/cart';
 import { findItem } from '../test/mocks/fixtures';
+import { createGate } from '../test/mocks/gate';
 import { server } from '../test/mocks/server';
 import { renderRoute } from '../test/renderRoute';
 
@@ -84,14 +85,12 @@ describe('Корзина', () => {
 describe('Оформление заказа', () => {
   it('успех: лоадер, заказ по ценам из корзины, корзина очищена, сообщение', async () => {
     const orders = recordOrders();
-    let release: () => void = () => {};
+    const { gate, release } = createGate();
     server.use(
       http.post(
         '*/api/order',
         async () => {
-          await new Promise<void>((resolve) => {
-            release = resolve;
-          });
+          await gate;
           return new HttpResponse(null, { status: 204 });
         },
         { once: true },

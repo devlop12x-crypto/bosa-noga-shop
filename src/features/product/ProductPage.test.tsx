@@ -1,6 +1,8 @@
 import { screen, within } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import { describe, expect, it } from 'vitest';
+import { findItem } from '../../test/mocks/fixtures';
+import { createGate } from '../../test/mocks/gate';
 import { server } from '../../test/mocks/server';
 import { renderRoute } from '../../test/renderRoute';
 
@@ -11,9 +13,19 @@ const productSection = async () =>
 
 describe('Страница товара', () => {
   it('пока грузится — лоадер', async () => {
+    const { gate, release } = createGate();
+    server.use(
+      http.get('*/api/items/:id', async () => {
+        await gate;
+        return HttpResponse.json(findItem(100));
+      }),
+    );
     renderRoute('/catalog/100.html');
+
     expect(await screen.findByRole('status', { name: 'Загрузка товара' })).toBeInTheDocument();
+    release();
     await productSection();
+    expect(screen.queryByRole('status', { name: 'Загрузка товара' })).not.toBeInTheDocument();
   });
 
   it('первая картинка и характеристики из описания бренда; отсутствующее поле пустое', async () => {
