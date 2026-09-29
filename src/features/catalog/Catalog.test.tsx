@@ -101,6 +101,48 @@ describe('Каталог на главной', () => {
     expect(requests.at(-1)?.get('offset')).toBe('6');
   });
 
+  it('пока грузится новая категория — лоадер, товары прошлой категории уже убраны', async () => {
+    const { user } = renderRoute('/');
+    const section = await catalogSection();
+    await within(section).findByText('Перчатки мужские №1');
+
+    const { gate, release } = createGate();
+    server.use(
+      http.get(
+        '*/api/items',
+        async () => {
+          await gate;
+          return HttpResponse.json([]);
+        },
+        { once: true },
+      ),
+    );
+    await user.click(within(section).getByRole('button', { name: 'Женские' }));
+
+    expect(
+      await within(section).findByRole('status', { name: 'Загрузка каталога' }),
+    ).toBeInTheDocument();
+    expect(within(section).queryByText('Перчатки мужские №1')).not.toBeInTheDocument();
+    release();
+    expect(
+      await within(section).findByText('В этой категории пока нет товаров.'),
+    ).toBeInTheDocument();
+  });
+
+  it('новая категория не загрузилась — ошибка, а не старый список без предупреждения', async () => {
+    const { user } = renderRoute('/');
+    const section = await catalogSection();
+    await within(section).findByText('Перчатки мужские №1');
+
+    server.use(http.get('*/api/items', () => HttpResponse.error(), { once: true }));
+    await user.click(within(section).getByRole('button', { name: 'Женские' }));
+
+    expect(await within(section).findByRole('alert')).toHaveTextContent(
+      'Не удалось загрузить каталог.',
+    );
+    expect(within(section).queryByText('Перчатки мужские №1')).not.toBeInTheDocument();
+  });
+
   it('упала догрузка — показанные товары остаются, повторяется только следующая порция', async () => {
     const { user } = renderRoute('/');
     const section = await catalogSection();

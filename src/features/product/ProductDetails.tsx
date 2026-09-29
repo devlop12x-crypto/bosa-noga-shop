@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useAppDispatch } from '../../app/hooks';
 import type { Product } from '../../core/catalog';
@@ -16,6 +16,7 @@ export function ProductDetails({ product }: { product: Product }) {
   const navigate = useNavigate();
   const [variantId, setVariantId] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
+  const hintId = useId();
 
   const variants = availableVariants(product);
   const selected = variants.find(({ id }) => id === variantId);
@@ -73,10 +74,22 @@ export function ProductDetails({ product }: { product: Product }) {
                   onChange={setQuantity}
                 />
               </div>
+              {/*
+                Почему кнопка неактивна — не угадывать: подсказка прямо над ней.
+                После выбора скрывается через visibility, а не удаляется: место остаётся,
+                и кнопка не «прыгает» вверх под курсором.
+              */}
+              <p
+                id={hintId}
+                className={`catalog-item-hint text-center small${selected ? ' invisible' : ''}`}
+              >
+                {productConfig.selectVariantHint}
+              </p>
               <button
                 type="button"
                 className="btn btn-danger btn-block btn-lg"
                 disabled={!selected}
+                aria-describedby={selected ? undefined : hintId}
                 onClick={addToCart}
               >
                 В корзину

@@ -52,11 +52,21 @@ export const makeStore = ({ cartStorage = createMemoryCartStorage() }: MakeStore
     },
   });
 
-  cartStorage.subscribe((lines) => store.dispatch(synced(lines)));
+  const unsubscribeStorage = cartStorage.subscribe((lines) => store.dispatch(synced(lines)));
 
-  // Слушатели online/focus для refetchOnReconnect
-  setupListeners(store.dispatch);
-  return store;
+  // Слушатели online/focus для refetchOnReconnect.
+  // В RTK они глобальные на модуль: пока первый стор не отписался, следующий их не получит.
+  // В приложении стор один, а тестам нужен dispose, иначе после первого теста сеть «не возвращается».
+  const unsubscribeListeners = setupListeners(store.dispatch);
+
+  return Object.assign(store, {
+    /** Снимает подписки на window: события сети и изменения корзины в других вкладках */
+    dispose() {
+      unsubscribeListeners();
+      unsubscribeStorage();
+      persistence.clearListeners();
+    },
+  });
 };
 
 export type AppStore = ReturnType<typeof makeStore>;

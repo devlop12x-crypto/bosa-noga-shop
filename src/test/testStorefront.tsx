@@ -27,6 +27,7 @@ export const glovesStorefront: StorefrontConfig = {
   catalog: { imageAspectRatio: '1 / 1' },
   product: {
     variantsLabel: 'Размеры перчаток:',
+    selectVariantHint: 'Выберите размер руки',
     variantColumnTitle: 'Размер руки',
     specs: [
       { key: 'sku', label: 'Артикул' },

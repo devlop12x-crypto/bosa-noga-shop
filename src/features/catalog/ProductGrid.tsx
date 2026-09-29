@@ -14,8 +14,17 @@ interface ProductGridProps {
 }
 
 export function ProductGrid({ filter, onResetSearch }: ProductGridProps) {
-  const { data, error, isError, isFetchingNextPage, hasNextPage, fetchNextPage, refetch } =
-    useGetProductsInfiniteQuery(filter);
+  const {
+    // currentData, а не data: data хранит ответ по ПРЕДЫДУЩЕМУ фильтру, пока новый грузится
+    // или если он упал, — и старый список висел бы на экране вместо лоадера или ошибки
+    currentData: data,
+    error,
+    isError,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    refetch,
+  } = useGetProductsInfiniteQuery(filter);
 
   // Упала именно догрузка, а не первая порция. Флаг есть в селекторе эндпоинта,
   // а в тип результата хука RTK 2.12 его не вынес — берём из селектора, с полной типизацией

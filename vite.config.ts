@@ -6,6 +6,17 @@ import react from '@vitejs/plugin-react';
 // (/catalog/20.html), и относительные пути к ассетам на них ломаются.
 export default defineConfig({
   plugins: [react()],
+  build: {
+    rolldownOptions: {
+      output: {
+        // Библиотеки — отдельным чанком: они меняются реже кода приложения,
+        // и после деплоя браузер берёт их из кэша, скачивая заново только наш код
+        codeSplitting: {
+          groups: [{ name: 'vendor', test: /node_modules/ }],
+        },
+      },
+    },
+  },
   server: {
     // В разработке API ходит через прокси на локальный бэкенд диплома
     proxy: {

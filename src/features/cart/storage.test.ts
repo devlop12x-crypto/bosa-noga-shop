@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { makeStore } from '../../app/store';
 import type { CartLine } from '../../core/cart';
+import { registerCleanup } from '../../test/cleanup';
 import { selectCartLines } from './cartSlice';
 import { createLocalCartStorage, parseStoredCart, serializeCart } from './storage';
 
@@ -63,6 +64,7 @@ describe('createLocalCartStorage', () => {
   it('изменение в другой вкладке попадает в стор', () => {
     const cartStorage = createLocalCartStorage(window.localStorage, 'sync/cart');
     const store = makeStore({ cartStorage });
+    registerCleanup(store.dispose);
 
     window.dispatchEvent(
       new StorageEvent('storage', {
