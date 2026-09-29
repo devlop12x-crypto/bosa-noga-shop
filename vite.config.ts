@@ -1,11 +1,18 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
+import { staticPages } from './build/staticPages';
+import { ROUTES } from './src/shared/config/routes';
+
+/** Страницы с постоянным адресом-файлом: /catalog.html → catalog.html. Динамические (:id) не входят */
+const STATIC_PAGES = Object.values(ROUTES)
+  .filter((path) => path.endsWith('.html') && !path.includes(':'))
+  .map((path) => path.slice(1));
 
 // base не зашит: при деплое workflow передаёт --base=/<имя-репозитория>/.
 // Относительный base ('./') здесь не подходит: у приложения вложенные URL
 // (/catalog/20.html), и относительные пути к ассетам на них ломаются.
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), staticPages(STATIC_PAGES)],
   build: {
     rolldownOptions: {
       output: {

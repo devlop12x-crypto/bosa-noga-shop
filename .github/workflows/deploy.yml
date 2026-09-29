@@ -62,14 +62,10 @@ jobs:
       - run: npm ci
 
       # Абсолютный base из имени репозитория: у приложения вложенные URL
-      # (/catalog/20.html), относительный './' на них ломает пути к ассетам
+      # (/catalog/20.html), относительный './' на них ломает пути к ассетам.
+      # Копии index.html для Pages (catalog.html, …, 404.html) делает сама сборка — build/staticPages.ts
       - name: Сборка
         run: npm run build -- --base=/${{ github.event.repository.name }}/
-
-      # GitHub Pages отдаёт 404.html на любой несуществующий путь — так прямой
-      # заход на /catalog.html открывает SPA, а роутер сам решает, что показать
-      - name: SPA-фолбэк для GitHub Pages
-        run: cp dist/index.html dist/404.html
 
       - uses: actions/configure-pages@v6
 
