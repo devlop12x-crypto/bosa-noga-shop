@@ -74,19 +74,49 @@
   align-self: flex-start;
 }
 
-/* Размеры — кнопки выбора вместо span */
+/*
+ * Размеры — кнопки выбора вместо span. В вёрстке невыбранный размер — просто текст,
+ * поэтому добавлена рамка и отклик на наведение: видно, что это можно нажать.
+ * Выбранный размер — как в вёрстке (серая заливка из style.css).
+ */
 button.catalog-item-size {
-  border: 0;
+  margin: 0 3px 6px;
+  border: 1px solid #c5cdd2;
+  border-radius: 15px;
   background: none;
+  color: #495057;
+  line-height: 1.6;
   cursor: pointer;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s;
+}
+
+button.catalog-item-size:hover:not(.selected) {
+  border-color: #727e86;
+  background-color: #eef1f3;
 }
 
 button.catalog-item-size:focus-visible {
   outline: 2px solid #727e86;
-  border-radius: 15px;
+  outline-offset: 2px;
 }
 
-/* Выбранный размер: фон из style.css, у кнопки нужно явно вернуть его поверх background: none */
 button.catalog-item-size.selected {
+  border-color: #727e86;
   background: #727e86;
+  color: #fff;
+}
+
+.catalog-item-hint {
+  margin-bottom: 0.5rem;
+  color: #727e86;
+}
+
+/* Плашка «нет сети» прилипает к верху, чтобы её было видно на длинной странице */
+.offline-banner {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-radius: 0;
 }

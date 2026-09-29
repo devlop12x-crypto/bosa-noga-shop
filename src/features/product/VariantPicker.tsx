@@ -7,7 +7,11 @@ interface VariantPickerProps {
   onSelect: (id: string) => void;
 }
 
-/** Выбор одного варианта (размера). По умолчанию ничего не выбрано — требование задания */
+/**
+ * Выбор одного варианта (размера). По умолчанию ничего не выбрано — требование задания.
+ * Невыбранные варианты с тонкой рамкой: в вёрстке они выглядят как простой текст,
+ * и по нему не догадаться, что его нужно нажать.
+ */
 export function VariantPicker({ label, variants, selectedId, onSelect }: VariantPickerProps) {
   return (
     <p role="group" aria-label={label}>

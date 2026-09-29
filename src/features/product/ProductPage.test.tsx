@@ -59,10 +59,15 @@ describe('Страница товара', () => {
     ).toEqual(['7', '9']);
     const addButton = within(section).getByRole('button', { name: 'В корзину' });
     expect(addButton).toBeDisabled();
+    // Почему кнопка неактивна — подсказка из бренда, связана с кнопкой для скринридера
+    expect(addButton).toHaveAccessibleDescription('Выберите размер руки');
 
     await user.click(within(sizes).getByRole('button', { name: '9' }));
     expect(within(sizes).getByRole('button', { name: '9' })).toHaveClass('selected');
     expect(addButton).toBeEnabled();
+    // Подсказка скрыта (visibility), но место держит — кнопка не сдвигается
+    expect(within(section).getByText('Выберите размер руки')).toHaveClass('invisible');
+    expect(addButton).not.toHaveAccessibleDescription();
 
     // Размер можно выбрать только один
     await user.click(within(sizes).getByRole('button', { name: '7' }));

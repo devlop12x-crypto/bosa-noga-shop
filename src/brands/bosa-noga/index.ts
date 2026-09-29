@@ -26,6 +26,7 @@ export const bosaNoga: StorefrontConfig = {
   catalog: { imageAspectRatio: '3 / 4' },
   product: {
     variantsLabel: 'Размеры в наличии:',
+    selectVariantHint: 'Выберите размер, чтобы добавить товар в корзину',
     variantColumnTitle: 'Размер',
     // Ровно те поля, что в вёрстке и задании — «других не нужно»
     specs: [

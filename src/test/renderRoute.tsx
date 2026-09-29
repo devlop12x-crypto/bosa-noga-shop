@@ -8,6 +8,7 @@ import type { CartLine } from '../core/cart';
 import { createMemoryCartStorage } from '../features/cart/storage';
 import { StorefrontProvider } from '../storefront';
 import type { StorefrontConfig } from '../storefront';
+import { registerCleanup } from './cleanup';
 import { glovesStorefront } from './testStorefront';
 
 interface RenderRouteOptions {
@@ -24,6 +25,7 @@ export function renderRoute(
   const router = createMemoryRouter(routes, { initialEntries: [url] });
   const cartStorage = createMemoryCartStorage(cart);
   const store = makeStore({ cartStorage });
+  registerCleanup(store.dispose);
   const user = userEvent.setup();
   const view = render(
     <Provider store={store}>
